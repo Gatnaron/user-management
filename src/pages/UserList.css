@@ -1,0 +1,16 @@
+.user-list-layout {
+    height: 100vh;
+}
+
+.user-list-content {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}

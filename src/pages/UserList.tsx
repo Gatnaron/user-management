@@ -1,33 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Card } from 'antd';
+import { Layout } from 'antd';
 import { User } from '../models/User';
 import UserCard from '../components/UserCard';
 import Loader from '../components/Loader';
+import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
+import './UserList.css';
 
-const UserList: React.FC = () => {
-    const [users, setUsers] = useState<User[]>([]);
+const { Content } = Layout;
+
+interface UserListProps {
+    users: User[];
+}
+
+const UserList: React.FC<UserListProps> = ({ users }) => {
+    const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
     const [loading, setLoading] = useState<boolean>(true);
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // Добавляем хук useNavigate
 
     useEffect(() => {
-        // Имитируем загрузку данных
         setTimeout(() => {
             setLoading(false);
-            // Пример данных для пользователей
-            setUsers([
-                { id: '1', username: 'user1', firstName: 'John', lastName: 'Doe', password: '', roles: ['DEVELOPER'], workBorders: [{ id: '1', name: 'Белгатой' }] },
-                { id: '2', username: 'user2', firstName: 'Jane', lastName: 'Smith', password: '', roles: ['ANT_MANAGER'], workBorders: [{ id: '2', name: 'Шали' }] }
-            ]);
+            setFilteredUsers(users);
         }, 1000);
-    }, []);
+    }, [users]);
 
-    const addUser = () => {
-        navigate('/user-form');
-    };
-
-    const editUser = (id: string) => {
-        navigate(`/user-form/${id}`);
+    const handleSearch = (value: string) => {
+        const filtered = users.filter(user =>
+            user.username.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredUsers(filtered);
     };
 
     if (loading) {
@@ -35,16 +37,20 @@ const UserList: React.FC = () => {
     }
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minHeight: '100vh' }}>
-            <Card style={{ width: '60%', textAlign: 'center' }}>
-                <Button type="primary" onClick={addUser} style={{ marginBottom: '16px' }}>Добавить нового пользователя</Button>
-                <div>
-                    {users.map(user => (
-                        <UserCard key={user.id} user={user} onClick={() => editUser(user.id)} />
+        <Layout className="user-list-layout">
+            <Header onSearch={handleSearch} />
+            <Content className="user-list-content">
+                <div className="user-grid">
+                    {filteredUsers.map(user => (
+                        <UserCard
+                            key={user.id}
+                            user={user}
+                            onClick={() => navigate(`/user-form/${user.id}`)} // Используем navigate для навигации
+                        />
                     ))}
                 </div>
-            </Card>
-        </div>
+            </Content>
+        </Layout>
     );
 };
 

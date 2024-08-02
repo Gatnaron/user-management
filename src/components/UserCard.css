@@ -1,0 +1,13 @@
+.user-card {
+    width: 300px;
+    margin: 10px;
+}
+
+.user-tag {
+    background-color: #e6f7ff;
+    border-color: #91d5ff;
+    color: #1890ff;
+    border-radius: 5px;
+    padding: 0 5px;
+    margin-right: 5px;
+}

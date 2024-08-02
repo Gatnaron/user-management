@@ -1,0 +1,17 @@
+.user-form-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.user-form-card {
+    width: 600px;
+}
+
+.user-form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
