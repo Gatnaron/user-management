@@ -3,11 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Input, Button, Select, message, Card, Layout } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IFormValues } from '../models/IFormValues';
-import { User, roles, workBorders } from '../models/User';
-import formValuesSchema from '../validation/formValuesSchema';
-import Header from '../components/Header';
-import useUserStore from '../store/userStore';
+import { IFormValues } from '../model/types/IFormValues';
+import { User, roles, workBorders } from '../../../entities/User/model/types/User';
+import formValuesSchema from '../model/validation/formValuesSchema';
+import Header from '../../../shared/ui/Header/Header';
+import useUserStore from '../../../entities/User/model/store/userStore';
 import './UserForm.scss';
 
 const { Option } = Select;

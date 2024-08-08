@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import UserList from './pages/UserList';
-import UserForm from './pages/UserForm';
-import useUserStore from './store/userStore';
-import { User } from './models/User';
+import UserList from '../features/UserList/ui/UserList';
+import UserForm from '../features/UserForm/ui/UserForm';
+import useUserStore from '../entities/User/model/store/userStore';
+
 
 const App: React.FC = () => {
     const { users, addUser, updateUser, deleteUser } = useUserStore();

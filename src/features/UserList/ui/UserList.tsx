@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Layout } from 'antd';
-import { User } from '../models/User';
-import UserCard from '../components/UserCard';
-import Loader from '../components/Loader';
-import Header from '../components/Header';
+import { User } from '../../../entities/User/model/types/User';
+import UserCard from '../../../entities/User/ui/UserCard/UserCard';
+import Loader from '../../../shared/ui/Loader/Loader';
+import Header from '../../../shared/ui/Header/Header';
 import { useNavigate } from 'react-router-dom';
-import useUserStore from '../store/userStore';
+import useUserStore from '../../../entities/User/model/store/userStore';
 import './UserList.scss';
 
 const { Content } = Layout;

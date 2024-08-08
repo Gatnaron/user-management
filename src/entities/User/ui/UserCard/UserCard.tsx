@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Tag } from 'antd';
-import { User } from '../models/User';
+import { User } from '../../model/types/User';
 import './UserCard.scss';
 
 interface UserCardProps {
