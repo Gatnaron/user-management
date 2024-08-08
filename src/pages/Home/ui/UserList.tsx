@@ -6,22 +6,26 @@ import Loader from '../../../shared/ui/Loader/Loader';
 import Header from '../../../shared/ui/Header/Header';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '../../../entities/User/model/store/userStore';
+import { generateFakeUsers } from '../../../shared/lib/fakeData';
 import './UserList.scss';
 
 const { Content } = Layout;
 
 const UserList: React.FC = () => {
-    const { users } = useUserStore();
-    const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
+    const { users: storedUsers } = useUserStore();
+    const [users, setUsers] = useState<User[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        setTimeout(() => {
-            setLoading(false);
-            setFilteredUsers(users);
-        }, 1000);
-    }, [users]);
+        // Load stored users and combine with fake users
+        const fakeUsers = generateFakeUsers(10);
+        const combinedUsers = [...storedUsers, ...fakeUsers];
+        setUsers(combinedUsers);
+        setFilteredUsers(combinedUsers);
+        setLoading(false);
+    }, [storedUsers]);
 
     const handleSearch = (value: string) => {
         const filtered = users.filter(user =>
