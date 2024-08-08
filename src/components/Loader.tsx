@@ -1,6 +1,6 @@
 import React from 'react';
 import { Spin } from 'antd';
-import './Loader.css';
+import './Loader.scss';
 
 const Loader: React.FC = () => {
     return (

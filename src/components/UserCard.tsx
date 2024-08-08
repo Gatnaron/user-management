@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Tag } from 'antd';
 import { User } from '../models/User';
-import './UserCard.css';
+import './UserCard.scss';
 
 interface UserCardProps {
     user: User;

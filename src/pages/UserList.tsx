@@ -5,18 +5,16 @@ import UserCard from '../components/UserCard';
 import Loader from '../components/Loader';
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
-import './UserList.css';
+import useUserStore from '../store/userStore';
+import './UserList.scss';
 
 const { Content } = Layout;
 
-interface UserListProps {
-    users: User[];
-}
-
-const UserList: React.FC<UserListProps> = ({ users }) => {
+const UserList: React.FC = () => {
+    const { users } = useUserStore();
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
     const [loading, setLoading] = useState<boolean>(true);
-    const navigate = useNavigate(); // Добавляем хук useNavigate
+    const navigate = useNavigate();
 
     useEffect(() => {
         setTimeout(() => {
@@ -45,7 +43,7 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
                         <UserCard
                             key={user.id}
                             user={user}
-                            onClick={() => navigate(`/user-form/${user.id}`)} // Используем navigate для навигации
+                            onClick={() => navigate(`/user-form/${user.id}`)}
                         />
                     ))}
                 </div>

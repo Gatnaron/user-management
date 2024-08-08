@@ -3,19 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Input, Button, Select, message, Card, Layout } from 'antd';
 import { User, roles, workBorders } from '../models/User';
 import Header from '../components/Header';
-import './UserForm.css';
+import useUserStore from '../store/userStore';
+import './UserForm.scss';
 
 const { Option } = Select;
 const { Content } = Layout;
 
-interface UserFormProps {
-    users: User[];
-    addUser?: (user: User) => void;
-    updateUser?: (user: User) => void;
-    deleteUser?: (userId: string) => void;
-}
-
-const UserForm: React.FC<UserFormProps> = ({ users, addUser, updateUser, deleteUser }) => {
+const UserForm: React.FC = () => {
+    const { users, addUser, updateUser, deleteUser } = useUserStore();
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { id } = useParams<{ id?: string }>();
