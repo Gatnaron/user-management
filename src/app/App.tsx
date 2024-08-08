@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import UserList from '../features/UserList/ui/UserList';
+import UserList from '../pages/Home/ui/UserList';
 import UserForm from '../features/UserForm/ui/UserForm';
 import useUserStore from '../entities/User/model/store/userStore';
 
