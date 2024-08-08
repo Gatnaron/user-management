@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Input, Button, Select, message, Card, Layout } from 'antd';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { IFormValues } from '../models/IFormValues';
 import { User, roles, workBorders } from '../models/User';
+import formValuesSchema from '../validation/formValuesSchema';
 import Header from '../components/Header';
 import useUserStore from '../store/userStore';
 import './UserForm.scss';
@@ -11,7 +15,9 @@ const { Content } = Layout;
 
 const UserForm: React.FC = () => {
     const { users, addUser, updateUser, deleteUser } = useUserStore();
-    const [form] = Form.useForm();
+    const { control, handleSubmit, setValue, reset } = useForm<IFormValues>({
+        resolver: yupResolver(formValuesSchema),
+    });
     const navigate = useNavigate();
     const { id } = useParams<{ id?: string }>();
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -21,19 +27,19 @@ const UserForm: React.FC = () => {
             setIsEditMode(true);
             const user = users.find(user => user.id === id);
             if (user) {
-                form.setFieldsValue({
+                reset({
                     ...user,
                     workBorders: user.workBorders.map(border => border.id),
                 });
             }
         } else {
             setIsEditMode(false);
-            form.resetFields();
+            reset({});
         }
-    }, [id, users, form]);
+    }, [id, users, reset]);
 
-    const handleFinish = (values: any) => {
-        const selectedWorkBorders = values.workBorders.map((id: string) => workBorders.find(border => border.id === id));
+    const onSubmit = (values: IFormValues) => {
+        const selectedWorkBorders = values.workBorders.map((id: string) => workBorders.find(border => border.id === id)!);
 
         if (isEditMode) {
             const updatedUser = { ...values, id, workBorders: selectedWorkBorders };
@@ -64,33 +70,93 @@ const UserForm: React.FC = () => {
             <Header onSearch={() => {}} />
             <Content className="user-form-content">
                 <Card className="user-form-card">
-                    <Form form={form} onFinish={handleFinish} layout="vertical">
-                        <Form.Item name="username" label="Username" rules={[{ required: true, min: 3 }]}>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item name="password" label="Password" rules={[{ required: true, min: 4 }]}>
-                            <Input.Password />
-                        </Form.Item>
-                        <Form.Item name="firstName" label="First Name" rules={[{ required: true, min: 2 }]}>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item name="lastName" label="Last Name">
-                            <Input />
-                        </Form.Item>
-                        <Form.Item name="roles" label="Roles" rules={[{ required: true }]}>
-                            <Select mode="multiple">
-                                {roles.map(role => (
-                                    <Option key={role} value={role}>{role}</Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="workBorders" label="Work Borders" rules={[{ required: true }]}>
-                            <Select mode="multiple">
-                                {workBorders.map(border => (
-                                    <Option key={border.id} value={border.id}>{border.name}</Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Controller
+                            name="username"
+                            control={control}
+                            render={({ field, fieldState: { error } }) => (
+                                <Form.Item
+                                    label="Username"
+                                    validateStatus={error ? 'error' : ''}
+                                    help={error?.message}
+                                >
+                                    <Input {...field} />
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            name="password"
+                            control={control}
+                            render={({ field, fieldState: { error } }) => (
+                                <Form.Item
+                                    label="Password"
+                                    validateStatus={error ? 'error' : ''}
+                                    help={error?.message}
+                                >
+                                    <Input.Password {...field} />
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            name="firstName"
+                            control={control}
+                            render={({ field, fieldState: { error } }) => (
+                                <Form.Item
+                                    label="First Name"
+                                    validateStatus={error ? 'error' : ''}
+                                    help={error?.message}
+                                >
+                                    <Input {...field} />
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            name="lastName"
+                            control={control}
+                            render={({ field, fieldState: { error } }) => (
+                                <Form.Item
+                                    label="Last Name"
+                                    validateStatus={error ? 'error' : ''}
+                                    help={error?.message}
+                                >
+                                    <Input {...field} />
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            name="roles"
+                            control={control}
+                            render={({ field, fieldState: { error } }) => (
+                                <Form.Item
+                                    label="Roles"
+                                    validateStatus={error ? 'error' : ''}
+                                    help={error?.message}
+                                >
+                                    <Select mode="multiple" {...field}>
+                                        {roles.map(role => (
+                                            <Option key={role} value={role}>{role}</Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            name="workBorders"
+                            control={control}
+                            render={({ field, fieldState: { error } }) => (
+                                <Form.Item
+                                    label="Work Borders"
+                                    validateStatus={error ? 'error' : ''}
+                                    help={error?.message}
+                                >
+                                    <Select mode="multiple" {...field}>
+                                        {workBorders.map(border => (
+                                            <Option key={border.id} value={border.id}>{border.name}</Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )}
+                        />
                         <Button onClick={goBack} style={{ marginRight: '10px' }}>Вернуться к списку</Button>
                         {isEditMode ? (
                             <>
@@ -100,7 +166,7 @@ const UserForm: React.FC = () => {
                         ) : (
                             <Button type="primary" htmlType="submit">Создать пользователя</Button>
                         )}
-                    </Form>
+                    </form>
                 </Card>
             </Content>
         </Layout>
